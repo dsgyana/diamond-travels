@@ -236,4 +236,17 @@ const servicesDetail = [
   },
 ];
 
-export { images, galleryItems, galleryDetail, testimonials, serviceCards, fleet, fleetDetail, routes, routeDetail, servicesDetail };
+const contactInfo = {
+  phone: '+91 79786 76742',
+  phoneDisplay: '+91 79786 76742',
+  phoneTel: '+917978676742',
+  whatsapp: '+91 79786 76742',
+  whatsappNumber: '917978676742',
+  whatsappDefaultMsg: 'Hello Diamond Travels, I would like to enquire about booking a cab.',
+  email: 'contact@diamondtravels.in',
+  address: 'Cuttack & Bhubaneswar, Odisha',
+  timing: '24/7 Available',
+};
+
+export { images, galleryItems, galleryDetail, testimonials, serviceCards, fleet, fleetDetail, routes, routeDetail, servicesDetail, contactInfo };
+

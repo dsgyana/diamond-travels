@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowUpRight, Menu, MessageCircle, Navigation, Phone, X } from 'lucide-react';
+import { contactInfo } from './data';
 
 export function Layout({ children }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -12,9 +13,26 @@ export function Layout({ children }) {
 
   useEffect(() => {
     setMenuOpen(false);
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = menuOpen ? 'hidden' : '';
+    }
+    return () => {
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = '';
+      }
+    };
+  }, [menuOpen]);
+
+  const isDarkHeroPage = location.pathname === '/wedding';
+
   const navItems = [
+    { label: 'Home', path: '/' },
     { label: 'Services', path: '/services' },
     { label: 'Fleet', path: '/fleet' },
     { label: 'Wedding', path: '/wedding' },
@@ -25,21 +43,82 @@ export function Layout({ children }) {
 
   return (
     <div className="app-shell">
-      <header className="site-header">
+      {/* Dim backdrop when mobile drawer is open */}
+      <div
+        className={`drawer-backdrop ${menuOpen ? 'active' : ''}`}
+        onClick={() => setMenuOpen(false)}
+        aria-hidden="true"
+      />
+
+      <header className={`site-header ${isDarkHeroPage ? 'light-header' : ''}`}>
         <Link className="brand" to="/" aria-label="Diamond Travels home">
           <span className="brand-mark"><span></span><span></span><span></span></span>
           <span><strong>DIAMOND</strong><small>TRAVELS</small></span>
         </Link>
-        <nav className={menuOpen ? 'main-nav open' : 'main-nav'} aria-label="Main navigation">
-          {navItems.map((item) => (
-            <Link key={item.label} to={item.path} className={location.pathname === item.path ? 'nav-active' : ''}>{item.label}</Link>
-          ))}
-          <Link className="nav-quote" to="/quote">Get a quote <ArrowUpRight size={16} /></Link>
-          <button className="menu-close" onClick={() => setMenuOpen(false)} aria-label="Close menu"><X size={22} /></button>
+        <nav className={`main-nav ${menuOpen ? 'open' : ''}`} aria-label="Main navigation">
+          {/* Mobile drawer header with brand & single close button */}
+          <div className="drawer-header">
+            <Link className="brand" to="/" onClick={() => setMenuOpen(false)}>
+              <span className="brand-mark"><span></span><span></span><span></span></span>
+              <span><strong>DIAMOND</strong><small>TRAVELS</small></span>
+            </Link>
+            <button
+              className="drawer-close-btn"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          <div className="drawer-links">
+            {navItems.map((item, index) => (
+              <Link
+                key={item.label}
+                to={item.path}
+                className={location.pathname === item.path ? 'nav-active' : ''}
+                style={{ '--item-index': index }}
+                onClick={() => setMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          <Link
+            className="nav-quote"
+            to="/quote"
+            onClick={() => setMenuOpen(false)}
+          >
+            Get a quote <ArrowUpRight size={16} />
+          </Link>
+
+          <div className="drawer-contact-strip">
+            <a href={`tel:${contactInfo.phoneTel}`} aria-label="Call Diamond Travels">
+              <Phone size={15} /> <span>{contactInfo.phoneDisplay}</span>
+            </a>
+            <a
+              href={`https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(contactInfo.whatsappDefaultMsg)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp Diamond Travels"
+            >
+              <MessageCircle size={15} /> <span>WhatsApp</span>
+            </a>
+          </div>
         </nav>
-        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}>{menuOpen ? <X /> : <Menu />}</button>
+        <button
+          className="menu-toggle"
+          onClick={() => setMenuOpen(true)}
+          aria-label="Open menu"
+          aria-expanded={menuOpen}
+        >
+          <Menu size={26} />
+        </button>
       </header>
+
       <main id="top">{children}</main>
+
       <footer className="site-footer" id="contact">
         <div className="footer-top">
           <div>
@@ -47,17 +126,93 @@ export function Layout({ children }) {
             <p>Reliable rides.<br /><em>Thoughtfully arranged.</em></p>
           </div>
           <div className="footer-links">
-            <div><strong>Explore</strong><Link to="/services">Services</Link><Link to="/fleet">Fleet</Link><Link to="/wedding">Wedding travel</Link><Link to="/gallery">Gallery</Link></div>
-            <div><strong>Plan</strong><Link to="/routes">Popular routes</Link><Link to="/quote">Get a quote</Link><Link to="/quote">Contact</Link></div>
-            <div><strong>Based in</strong><span>Cuttack, Odisha</span><span>Serving Bhubaneswar</span><span>Across Odisha</span></div>
+            <div>
+              <strong>Explore</strong>
+              <Link to="/services">Services</Link>
+              <Link to="/fleet">Fleet</Link>
+              <Link to="/wedding">Wedding travel</Link>
+              <Link to="/gallery">Gallery</Link>
+            </div>
+            <div>
+              <strong>Plan</strong>
+              <Link to="/routes">Popular routes</Link>
+              <Link to="/quote">Get a quote</Link>
+              <Link to="/quote">Book online</Link>
+            </div>
+            <div>
+              <strong>Contact</strong>
+              <a href={`tel:${contactInfo.phoneTel}`}>{contactInfo.phoneDisplay}</a>
+              <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+              <a
+                href={`https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(contactInfo.whatsappDefaultMsg)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                WhatsApp Chat
+              </a>
+            </div>
+            <div>
+              <strong>Locations</strong>
+              <span>Cuttack, Odisha</span>
+              <span>Bhubaneswar, Odisha</span>
+              <span>Across Odisha</span>
+            </div>
           </div>
         </div>
-        <div className="footer-bottom"><span>© 2026 Diamond Travels</span><span>Built for better journeys.</span></div>
+        <div className="footer-bottom">
+          <span>© 2026 Diamond Travels</span>
+          <span>{contactInfo.phoneDisplay} · {contactInfo.email}</span>
+          <span>Built for better journeys.</span>
+        </div>
       </footer>
+
+      {/* Desktop Floating Concierge Pill (Desktop Only) */}
+      <div className="desktop-floating-concierge" role="complementary" aria-label="Quick contact concierge">
+        <div className="concierge-badge">
+          <span className="concierge-pulse" />
+          <span className="concierge-status">24/7 Concierge</span>
+        </div>
+        <div className="concierge-actions">
+          <a
+            href={`https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(contactInfo.whatsappDefaultMsg)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="concierge-btn whatsapp"
+            aria-label="Instant WhatsApp quote"
+          >
+            <MessageCircle size={15} />
+            <span>WhatsApp</span>
+          </a>
+          <a
+            href={`tel:${contactInfo.phoneTel}`}
+            className="concierge-btn call"
+            aria-label="Call Diamond Travels"
+          >
+            <Phone size={14} />
+            <span>Call</span>
+          </a>
+        </div>
+      </div>
+
+      {/* Mobile Bottom Action Bar (Mobile Only) */}
       <div className="mobile-action-bar">
-        <button onClick={() => setMenuOpen(false)}><Phone size={17} /><span>Call</span></button>
-        <button onClick={() => setMenuOpen(false)}><MessageCircle size={17} /><span>WhatsApp</span></button>
-        <Link to="/quote"><Navigation size={17} /><span>Get quote</span></Link>
+        <a href={`tel:${contactInfo.phoneTel}`} aria-label="Call Diamond Travels">
+          <Phone size={17} />
+          <span>Call</span>
+        </a>
+        <a
+          href={`https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(contactInfo.whatsappDefaultMsg)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat on WhatsApp"
+        >
+          <MessageCircle size={17} />
+          <span>WhatsApp</span>
+        </a>
+        <Link to="/quote" aria-label="Get a ride quote">
+          <Navigation size={17} />
+          <span>Get quote</span>
+        </Link>
       </div>
     </div>
   );
