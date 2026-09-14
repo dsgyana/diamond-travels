@@ -1,0 +1,26 @@
+{
+  "name": "diamond-travels",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build:client": "vite build",
+    "build:server": "vite build --ssr src/entry-server.jsx --outDir dist-server",
+    "build:ssg": "node prerender.js",
+    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-server && node prerender.js && rm -rf dist-server",
+    "preview": "vite preview",
+    "deploy": "wrangler pages deploy dist --project-name diamond-travels --branch main"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "^7.18.3",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "wrangler": "^4.131.1"
+  }
+}
