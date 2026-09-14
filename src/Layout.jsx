@@ -1,6 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ArrowUpRight, Menu, MessageCircle, Navigation, Phone, X } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Car,
+  ChevronRight,
+  Compass,
+  Heart,
+  Home,
+  Image,
+  Menu,
+  MessageCircle,
+  Navigation,
+  Phone,
+  PhoneCall,
+  Sparkles,
+  X
+} from 'lucide-react';
 import { contactInfo } from './data';
 
 export function Layout({ children }) {
@@ -32,14 +47,34 @@ export function Layout({ children }) {
   const isDarkHeroPage = location.pathname === '/wedding';
 
   const navItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Services', path: '/services' },
-    { label: 'Fleet', path: '/fleet' },
-    { label: 'Wedding', path: '/wedding' },
-    { label: 'Routes', path: '/routes' },
-    { label: 'Gallery', path: '/gallery' },
-    { label: 'Contact', path: '/quote' },
+    { label: 'Home', path: '/', icon: Home },
+    { label: 'Services', path: '/services', icon: Sparkles },
+    { label: 'Fleet', path: '/fleet', icon: Car },
+    { label: 'Wedding', path: '/wedding', icon: Heart },
+    { label: 'Routes', path: '/routes', icon: Compass },
+    { label: 'Gallery', path: '/gallery', icon: Image },
+    { label: 'Contact', path: '/quote', icon: PhoneCall },
   ];
+
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchEnd - touchStart;
+    if (distance > 50) {
+      setMenuOpen(false);
+    }
+  };
 
   return (
     <div className="app-shell">
@@ -55,7 +90,13 @@ export function Layout({ children }) {
           <span className="brand-mark"><span></span><span></span><span></span></span>
           <span><strong>DIAMOND</strong><small>TRAVELS</small></span>
         </Link>
-        <nav className={`main-nav ${menuOpen ? 'open' : ''}`} aria-label="Main navigation">
+        <nav
+          className={`main-nav ${menuOpen ? 'open' : ''}`}
+          aria-label="Main navigation"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {/* Mobile drawer header with brand & single close button */}
           <div className="drawer-header">
             <Link className="brand" to="/" onClick={() => setMenuOpen(false)}>
@@ -67,44 +108,56 @@ export function Layout({ children }) {
               onClick={() => setMenuOpen(false)}
               aria-label="Close menu"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
           </div>
 
           <div className="drawer-links">
-            {navItems.map((item, index) => (
-              <Link
-                key={item.label}
-                to={item.path}
-                className={location.pathname === item.path ? 'nav-active' : ''}
-                style={{ '--item-index': index }}
-                onClick={() => setMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item, index) => {
+              const IconComponent = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.label}
+                  to={item.path}
+                  className={isActive ? 'nav-active' : ''}
+                  style={{ '--item-index': index }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span className="drawer-link-left">
+                    <span className="drawer-link-icon">
+                      <IconComponent size={18} />
+                    </span>
+                    <span className="drawer-link-label">{item.label}</span>
+                  </span>
+                  <ChevronRight size={16} className="drawer-link-arrow" />
+                </Link>
+              );
+            })}
           </div>
 
-          <Link
-            className="nav-quote"
-            to="/quote"
-            onClick={() => setMenuOpen(false)}
-          >
-            Get a quote <ArrowUpRight size={16} />
-          </Link>
-
-          <div className="drawer-contact-strip">
-            <a href={`tel:${contactInfo.phoneTel}`} aria-label="Call Diamond Travels">
-              <Phone size={15} /> <span>{contactInfo.phoneDisplay}</span>
-            </a>
-            <a
-              href={`https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(contactInfo.whatsappDefaultMsg)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="WhatsApp Diamond Travels"
+          <div className="drawer-bottom-card">
+            <Link
+              className="nav-quote"
+              to="/quote"
+              onClick={() => setMenuOpen(false)}
             >
-              <MessageCircle size={15} /> <span>WhatsApp</span>
-            </a>
+              Get a quote <ArrowUpRight size={16} />
+            </Link>
+
+            <div className="drawer-contact-strip">
+              <a href={`tel:${contactInfo.phoneTel}`} aria-label="Call Diamond Travels">
+                <Phone size={14} /> <span>Call Us</span>
+              </a>
+              <a
+                href={`https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(contactInfo.whatsappDefaultMsg)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp Diamond Travels"
+              >
+                <MessageCircle size={14} /> <span>WhatsApp</span>
+              </a>
+            </div>
           </div>
         </nav>
         <button
@@ -195,7 +248,7 @@ export function Layout({ children }) {
       </div>
 
       {/* Mobile Bottom Action Bar (Mobile Only) */}
-      <div className="mobile-action-bar">
+      <div className={`mobile-action-bar ${menuOpen ? 'menu-is-open' : ''}`}>
         <a href={`tel:${contactInfo.phoneTel}`} aria-label="Call Diamond Travels">
           <Phone size={17} />
           <span>Call</span>

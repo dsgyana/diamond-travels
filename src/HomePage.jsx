@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, CarFront, Check, Clock3, HeartHandshake, MessageCircle, Navigation, Phone, Quote, ShieldCheck, Sparkles, Star, Users } from 'lucide-react';
-import { images, galleryItems, testimonials, serviceCards, fleet, routes } from './data';
+import { images, galleryItems, testimonials, serviceCards, fleet, routes, contactInfo } from './data';
 import { QuoteForm } from './QuoteForm';
 
 function ArrowDownIcon() { return <span className="down-arrow">↓</span>; }
@@ -40,30 +40,101 @@ export function HomePage() {
         <div className="fleet-layout"><div className="fleet-menu">{fleet.map((car, index) => <button className={fleetIndex === index ? 'fleet-tab active' : 'fleet-tab'} key={car.name} onClick={() => setFleetIndex(index)}><span className="fleet-tab-index">0{index + 1}</span><span><strong>{car.name}</strong><small>{car.note}</small></span><ArrowRight size={17} /></button>)}<Link className="fleet-link" to="/quote">Need help choosing? <span>Ask us</span><ArrowUpRight size={15} /></Link></div><div className="fleet-preview"><img src={selectedFleet.image} alt={`${selectedFleet.name} for ${selectedFleet.note.toLowerCase()}`} /><div className="fleet-overlay"><div><p>{selectedFleet.name}</p><h3>{selectedFleet.model}</h3></div><span>{selectedFleet.seats}</span></div><div className="fleet-caption"><span>{selectedFleet.tone}</span><Link to="/fleet">See full fleet <ArrowRight size={16} /></Link></div></div></div>
       </section>
 
-      <section className="route-section section-pad" id="routes"><div className="route-intro"><p className="eyebrow eyebrow-light">Simple, useful estimates</p><h2>Popular roads.<br /><em>Clearer starting points.</em></h2><p>Public estimates help you plan. Your exact quote is always confirmed by a real person, based on your car and trip details.</p><Link className="button light-button" to="/routes">See all routes <ArrowRight size={17} /></Link></div><div className="route-list">{routes.map(([from, to, price]) => <Link className="route-row" key={to} to="/quote"><span className="route-line"><span className="route-dot"></span><span>{from}</span><ArrowRight size={14} /><span>{to}</span></span><strong>{price}</strong><ArrowUpRight className="route-arrow" size={17} /></Link>)}<p className="route-footnote">Estimates shown for design preview · tolls and trip details may change the final quote.</p></div></section>
+      <section className="route-section section-pad" id="routes">
+        <div className="route-intro"><p className="eyebrow eyebrow-light">Clear routes, straightforward rates</p><h2>Popular roads.<br /><em>Clear starting points.</em></h2><p>Every trip is calculated based on exact distance, vehicle choice, tolls and time. No hidden extras.</p><Link className="button light-button" to="/routes">See all routes <ArrowRight size={18} /></Link></div>
+        <div className="route-list">{routes.map((route) => <div className="route-row" key={route.name}><span className="route-dot"></span><div className="route-line"><span>{route.from}</span><ArrowRight size={14} /><span>{route.to}</span></div><strong>{route.price}</strong><ArrowUpRight className="route-arrow" size={16} /></div>)}<p className="route-footnote">Rates include driver allowance. Tolls, parking & state taxes extra as applicable.</p></div>
+      </section>
 
-      <section className="section-pad value-section"><div className="value-image"><img src={images.innova} alt="Family-ready vehicle on an outstation journey" /><div className="image-caption"><span>Ready for the road ahead</span><span>01 / 03</span></div></div><div className="value-copy"><p className="eyebrow">More than a car</p><h2>Good travel is felt in the <em>small things.</em></h2><p className="large-copy">A clean vehicle. A driver who knows the way. A quick reply when plans change. Diamond Travels brings a little more thoughtfulness to the journeys that fill your days.</p><div className="value-points"><div><HeartHandshake size={20} /><span><strong>Easy to talk to</strong><small>Real people before every ride</small></span></div><div><Users size={20} /><span><strong>Right-sized travel</strong><small>From one car to a whole family</small></span></div><div><Check size={20} /><span><strong>Clearer from the start</strong><small>Simple estimates, human confirmation</small></span></div></div></div></section>
+      <section className="value-section section-pad">
+        <div className="value-image"><img src={images.innova} alt="Innova ready for long road trip" /><div className="image-caption"><span>Odisha journeys</span><span>Driver-assisted</span></div></div>
+        <div className="value-copy">
+          <p className="eyebrow">Quiet confidence</p>
+          <h2>Good travel is felt in the <em>small things.</em></h2>
+          <p className="large-copy">A clean cabin. A driver who knows the road and respects your time. Clear communication from first message to drop-off.</p>
+          <div className="value-points">
+            <div><Check size={19} /><div><strong>Punctual pickups</strong><small>We factor in route timing so you are never rushed.</small></div></div>
+            <div><Check size={19} /><div><strong>Clean, maintained fleet</strong><small>Every car is checked, washed and prepared before departure.</small></div></div>
+            <div><Check size={19} /><div><strong>Experienced local drivers</strong><small>Courteous, route-smart drivers focused on your safety.</small></div></div>
+          </div>
+        </div>
+      </section>
 
-      <section className="wedding-section section-pad" id="wedding"><div className="wedding-copy"><p className="eyebrow">For the moments that matter</p><h2>Arrive with a little more <em>feeling.</em></h2><p>Wedding transport that feels considered from the first message to the final arrival. Decorated cars, groom transfers, premium arrivals and family movement — arranged around your day.</p><div className="wedding-tags"><span>Groom car</span><span>Decorated cars</span><span>Family vehicles</span><span>Premium arrivals</span></div><Link className="button primary" to="/wedding">Plan wedding travel <ArrowRight size={18} /></Link></div><div className="wedding-gallery"><img className="wedding-main" src={images.wedding} alt="Decorated wedding car at a warm Indian wedding venue" /><img className="wedding-small" src={images.audi} alt="Premium Audi arrival" /><span className="wedding-note">For your<br /><em>big day</em> <Sparkles size={14} /></span></div></section>
+      <section className="wedding-section section-pad">
+        <div className="wedding-copy">
+          <p className="eyebrow">Special occasions</p>
+          <h2>Arrive with a little more <em>feeling.</em></h2>
+          <p>Decorated wedding sedans, luxury arrivals, and coordinated fleet travel for family and guests across Odisha.</p>
+          <div className="wedding-tags"><span>Groom arrival</span><span>Bride family transport</span><span>Guest shuttle fleets</span><span>Outstation wedding travel</span></div>
+          <Link className="button primary" to="/wedding">Explore wedding travel <ArrowRight size={18} /></Link>
+        </div>
+        <div className="wedding-gallery">
+          <img className="wedding-main" src={images.wedding} alt="Decorated car for wedding arrival" />
+          <img className="wedding-small" src={fleet[3].image} alt="Luxury sedan for special occasion" />
+          <div className="wedding-note"><div><Sparkles size={18} /><span><em>Weddings</em><br />in Odisha</span></div></div>
+        </div>
+      </section>
 
-      <section className="process-section section-pad"><div className="section-heading"><div><p className="eyebrow">No complicated booking engine</p><h2>Three steps to a <em>better ride.</em></h2></div><p>You can call or message us directly. Or share a few details first — whichever feels easier.</p></div><div className="process-grid"><div><span>01</span><h3>Tell us your trip</h3><p>Pickup, destination, date and the kind of car that feels right.</p></div><div><span>02</span><h3>We confirm the details</h3><p>We'll check the car, explain the estimate and answer your questions.</p></div><div><span>03</span><h3>Your ride is arranged</h3><p>Once everything feels clear, your journey is taken care of.</p></div></div></section>
+      <section className="process-section section-pad">
+        <div className="section-heading"><div><p className="eyebrow">How it works</p><h2>Three steps to a <em>clearer ride.</em></h2></div><p>We keep the booking process simple and direct so you can plan with confidence.</p></div>
+        <div className="process-grid">
+          <div><span>01</span><h3>Tell us your trip</h3><p>Share your route, dates, passenger count and vehicle preference.</p></div>
+          <div><span>02</span><h3>Get clear pricing</h3><p>We provide a complete estimate with vehicle options and driver details.</p></div>
+          <div><span>03</span><h3>Ride with ease</h3><p>Your car arrives clean, on time, with a professional driver ready.</p></div>
+        </div>
+      </section>
 
-      <section className="gallery-section section-pad" id="gallery">
-        <div className="section-heading"><div><p className="eyebrow">Real moments, real journeys</p><h2>A look at the <em>road.</em></h2></div><p>Weddings, airport runs, family trips and the everyday travel that fills the week.</p></div>
-        <div className="gallery-grid">{galleryItems.map((item, i) => <figure key={i} className={`gallery-item gallery-${item.size}`}><img src={item.src} alt={item.alt} loading="lazy" /><figcaption><span>{item.label}</span></figcaption></figure>)}</div>
+      <section className="gallery-section section-pad">
+        <div className="section-heading"><div><p className="eyebrow">Real journeys</p><h2>A look at the <em>road.</em></h2></div><p>A peek at our vehicles on real routes, events and airport runs across Odisha.</p></div>
+        <div className="gallery-grid">
+          {galleryItems.slice(0, 5).map((item, idx) => (
+            <figure key={item.caption} className={`gallery-item ${idx === 0 ? 'gallery-tall' : idx === 3 ? 'gallery-wide' : 'gallery-square'}`}>
+              <img src={item.image} alt={item.caption} />
+              <figcaption><span>{item.caption}</span></figcaption>
+            </figure>
+          ))}
+        </div>
         <div className="section-link-row"><Link to="/gallery" className="section-link">View full gallery <ArrowRight size={16} /></Link></div>
       </section>
 
-      <section className="section-pad testimonials-section">
-        <div className="section-heading"><div><p className="eyebrow">Kind words from the road</p><h2>What travellers <em>say.</em></h2></div><p>Placeholder reviews for design preview — replace with genuine feedback before launch.</p></div>
-        <div className="testimonial-grid">{testimonials.map((t, i) => <article className="testimonial-card" key={i}><Quote className="testimonial-quote-icon" size={24} /><p className="testimonial-text">{t.quote}</p><div className="testimonial-meta"><div><strong>{t.name}</strong><small>{t.trip}</small></div><div className="testimonial-stars">{[0,1,2,3,4].map(s => <Star key={s} size={13} fill="currentColor" />)}</div></div></article>)}</div>
+      <section className="testimonials-section section-pad">
+        <div className="section-heading"><div><p className="eyebrow">Word of mouth</p><h2>What travellers <em>say.</em></h2></div><p>Real feedback from families, business travellers and event hosts.</p></div>
+        <div className="testimonial-grid">
+          {testimonials.map((t) => (
+            <div className="testimonial-card" key={t.name}>
+              <Quote className="testimonial-quote-icon" size={24} />
+              <p className="testimonial-text">"{t.quote}"</p>
+              <div className="testimonial-meta">
+                <div><strong>{t.name}</strong><small>{t.location}</small></div>
+                <div className="testimonial-stars">{[...Array(t.stars)].map((_, i) => <Star key={i} size={13} fill="currentColor" />)}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="final-cta-section">
         <div className="final-cta-inner">
           <p className="eyebrow eyebrow-light">Ready when you are</p>
           <h2>Tell us where you are going.<br /><em>We will help arrange the right car.</em></h2>
-          <div className="final-cta-actions"><Link className="button light-button" to="/quote">Get a quote <ArrowRight size={18} /></Link><Link className="button ghost-light" to="/quote"><Phone size={18} /> Call us</Link><Link className="button ghost-light" to="/quote"><MessageCircle size={18} /> WhatsApp</Link></div>
+          <div className="final-cta-actions">
+            <Link className="button light-button" to="/quote">Get a quote <ArrowRight size={18} /></Link>
+            <a
+              className="button ghost-light"
+              href={`tel:${contactInfo.phoneTel}`}
+              aria-label={`Call Diamond Travels at ${contactInfo.phoneDisplay}`}
+            >
+              <Phone size={18} /> Call us
+            </a>
+            <a
+              className="button ghost-light"
+              href={`https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(contactInfo.whatsappDefaultMsg)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Message Diamond Travels on WhatsApp"
+            >
+              <MessageCircle size={18} /> WhatsApp
+            </a>
+          </div>
         </div>
       </section>
 
