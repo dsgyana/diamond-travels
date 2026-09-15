@@ -162,10 +162,10 @@ const fleetDetail = [
 ];
 
 const routes = [
-  ['Cuttack', 'Bhubaneswar Airport', 'From ₹1,200'],
-  ['Cuttack', 'Bhubaneswar', 'From ₹900'],
-  ['Cuttack', 'Puri', 'From ₹1,800'],
-  ['Cuttack', 'Konark', 'From ₹2,200'],
+  { from: 'Cuttack', to: 'Bhubaneswar Airport', price: 'From ₹1,200' },
+  { from: 'Cuttack', to: 'Bhubaneswar', price: 'From ₹900' },
+  { from: 'Cuttack', to: 'Puri', price: 'From ₹1,800' },
+  { from: 'Cuttack', to: 'Konark', price: 'From ₹2,200' },
 ];
 
 const routeDetail = [

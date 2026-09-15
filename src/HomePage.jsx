@@ -42,7 +42,7 @@ export function HomePage() {
 
       <section className="route-section section-pad" id="routes">
         <div className="route-intro"><p className="eyebrow eyebrow-light">Clear routes, straightforward rates</p><h2>Popular roads.<br /><em>Clear starting points.</em></h2><p>Every trip is calculated based on exact distance, vehicle choice, tolls and time. No hidden extras.</p><Link className="button light-button" to="/routes">See all routes <ArrowRight size={18} /></Link></div>
-        <div className="route-list">{routes.map((route) => <div className="route-row" key={route.name}><span className="route-dot"></span><div className="route-line"><span>{route.from}</span><ArrowRight size={14} /><span>{route.to}</span></div><strong>{route.price}</strong><ArrowUpRight className="route-arrow" size={16} /></div>)}<p className="route-footnote">Rates include driver allowance. Tolls, parking & state taxes extra as applicable.</p></div>
+        <div className="route-list">{routes.map((route) => <div className="route-row" key={`${route.from}-${route.to}`}><span className="route-dot"></span><div className="route-line"><span>{route.from}</span><ArrowRight size={14} /><span>{route.to}</span></div><strong>{route.price}</strong><ArrowUpRight className="route-arrow" size={16} /></div>)}<p className="route-footnote">Rates include driver allowance. Tolls, parking & state taxes extra as applicable.</p></div>
       </section>
 
       <section className="value-section section-pad">
